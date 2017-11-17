@@ -14,9 +14,14 @@ export default class Options extends Component {
 
     this.state = {
       emailInput: '',
+      editingEmail: false,
       fileReceived: false,
       fileName: '',
       files: null,
+      oldPassword: '',
+      newPassword: '',
+      verifyNewPassword: '',
+      editingPassword: false
     };
 
     this.uploadFile = () => {
@@ -62,6 +67,59 @@ export default class Options extends Component {
       }
     }
 
+
+    this.handleKeyPress = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+
+        this.saveUpdatedEmail(this.state.emailInput);
+      }
+    }
+
+    this.handleSubmit = () => {
+      console.log('handling submit')
+    }
+/*
+    this.componentDidMount = () => {
+      console.log('mounting', this);
+      this.setState({editingEmail: false, emailInput: ''})
+    }
+*/
+    this.saveUpdatedEmail = (email) => {
+    //  e.preventDefault();
+      console.log(email);
+    }
+
+    this.openChangePassword = () => {
+      this.setStore({editingPassword: !this.state.editingPassword, })
+    }
+
+    this.handleOldPasswordChange = (e, newValue) => {
+      this.setState({oldPassword: newValue})
+    };
+
+    this.handleNewPasswordChange = (e, newValue) => {
+      this.setState({newPassword: newValue})
+    };
+
+    this.handleVerifyNewPasswordChange = (e, newValue) => {
+      this.setState({verifyNewPassword: newValue})
+    };
+
+    this.handlePasswordChange = () => {
+      console.log('chaging password');
+      this.setState({oldPassword: '', newPassword: '', verifyNewPassword: '', editingPassword: false})
+    }
+
+    this.setStore = (obj) => {
+      this.setState(obj);
+    }
+
+    this.handleClose = () => {
+      this.setStore({editingEmail: false, emailInput: '', oldPassword: '', newPassword: '', verifyNewPassword: '', editingPassword: false});
+      this.props.close();
+    }
+
     this.onDrop = (files) => {
       if(files) {
         this.setState({
@@ -79,7 +137,7 @@ export default class Options extends Component {
           <FlatButton
             label="Cancel"
             primary={true}
-            onClick={this.props.close}
+            onClick={this.handleClose}
           />
         ];
 
@@ -98,12 +156,64 @@ export default class Options extends Component {
                 <p>Username: {this.props.appState.currentUser.username}</p>
                 <p>Name: {this.props.appState.currentUser.firstName + ' ' + this.props.appState.currentUser.lastName}</p>
                 <p>Email: {this.props.appState.currentUser.email}</p>
-                <FlatButton label="Change email" primary={true}/>
-                <FlatButton label="Change Password" primary={true}/>
-              </div>
+                <FlatButton label="Change email" primary={true} onClick={() => this.setStore({editingEmail: !this.state.editingEmail, emailInput: ''})}/>
+                {this.state.editingEmail ?
+                                <div>
+                                 <form onSubmit={this.handleSubmit}>
+                                   <TextField
+                                     onKeyPress={this.handleKeyPress}
+                                     onChange={(e, newValue) => {this.setStore({emailInput: newValue})}}
+                                     hintText={'New Email Address'}
+                                     floatingLabelText={"New Email Address"}
+                                     value={this.state.emailInput}
+                                   />
+                              </form>
+                              <RaisedButton label="Sumbit New Email" primary={true} onClick={() => this.saveUpdatedEmail(this.state.emailInput)} /> </div>  : null}
+                <FlatButton label="Change Password" primary={true} onClick={this.openChangePassword}/>
+                {this.state.editingPassword ?
+                  <div>
+                    <form>
+                      <TextField
+                        onChange={this.handleOldPasswordChange}
+                        hintText="Old Password"
+                        floatingLabelText="Old Password"
+                        type="password"
+                        value={this.state.oldPassword}
+                        /><br />
+                      <TextField
+                        onChange={this.handleNewPasswordChange}
+                        hintText="New Password"
+                        floatingLabelText="New Password"
+                        type="password"
+                        value={this.state.newPassword}
+                        // errorText={this.state.password === this.state.verifyPassword ? '' : "Passwords do not match"}
+                        /><br />
+                      <TextField
+                        onChange={this.handleVerifyNewPasswordChange}
+                        hintText="Verify New Password"
+                        floatingLabelText="Verify New Password"
+                        type="password"
+                        value={this.state.verifyNewPassword}
+                        errorText={this.state.newPassword === this.state.verifyNewPassword ? '' : "Passwords do not match"}
+                      /><br />
+                    </form>
+                    <FlatButton
+                      label="Submit"
+                      primary={true}
+                      disabled={
+                        !this.state.oldPassword
+                        || !this.state.newPassword
+                        || !this.state.verifyNewPassword
+                        || this.state.newPassword !== this.state.verifyNewPassword
+                      }
+                      onClick={this.handlePasswordChange}
+                    />
+                  </div> : null
+                }
+            </div>
             <div className="rightOptions" style={{flex: 2}}>
               <Paper style={{marginTop: 10, maxHeight: 180, textAlign:'center', maxWidth: 140}} zDepth={1} >
-                <img alt={''} style={{maxHeight: 180, maxWidth: '100%', minWidth:"100%"}} src="http://res.cloudinary.com/getmeagiftlegacy/image/upload/v1510851221/most_normal_picture_m7n8rs.jpg"/>
+                <img alt={''} style={{border: "1px solid", maxHeight: 180, maxWidth: '100%', minWidth:"100%"}} src="http://res.cloudinary.com/getmeagiftlegacy/image/upload/v1510851221/most_normal_picture_m7n8rs.jpg"/>
               </Paper>
               <Dropzone disableClick={false} multiple={false} accept={'image/*'} onDrop={this.onDrop} style={{maxHeight: 50, maxWidth: 150}}>
                 <FlatButton secondary label="Add New Photo"></FlatButton>

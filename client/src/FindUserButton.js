@@ -166,7 +166,6 @@ export default class FindUserButton extends Component {
                 />
               </form>
             </div>
-            {console.log('HISTORY: ', this.props)}
             {this.state.usersFound && <Search history={this.props.history} handleClose={()=>{this.setStore({open: false})}}users={this.state.foundUsers}/>}
           </Dialog>
         </div>
