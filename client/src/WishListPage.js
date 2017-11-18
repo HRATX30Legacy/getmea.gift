@@ -59,34 +59,6 @@ const style = {
   }
 };
 
-// const FriendsList = props => {
-//   console.log(props.userData);
-//
-//
-//
-//   return (
-//     <div className="friends-list">
-//       <Paper>
-//         <AppBar
-//           title="Pending"
-//           iconElementLeft={<div></div>}
-//           />
-//           <MenuItem key="1" primaryText="it's me" />
-//           <MenuItem key="2" primaryText="hello" />
-//           <Divider />
-//           <MenuItem key="3" primaryText="it's me" />
-//           <AppBar
-//           title="All Friends"
-//           iconElementLeft={<div></div>}
-//           />
-//           <MenuItem key="4" primaryText="hello" />
-//           <Divider />
-//           <MenuItem key="5" primaryText="it's me" />
-//       </Paper>
-//     </div>
-//   );
-// };
-
 class WishListPage extends Component {
   constructor(props) {
     super(props);
@@ -102,6 +74,7 @@ class WishListPage extends Component {
       addListOpen: false,
       showPurchased: false
     }
+    this.renderMessages = this.renderMessages.bind(this)
   }
 
   componentDidMount() {
@@ -202,48 +175,12 @@ class WishListPage extends Component {
     // if (list.length > 0) {
 
       return (
-        <WishlistEntryGridList list={list} addItem={<AddItem list={this.state.currentList} getdata={this.getUserData.bind(this)} />} />
-
-
-        // <div>
-        //   <EntryList list={list} addListComponent={<AddItem list={this.state.currentList} getdata={this.getUserData.bind(this)}/>}/>
-        //   {/* { /* Displays the AddItem button only if currentList belongs to currentUser
-        //   isListOwner &&
-        //   } */}
-        // </div>
+        <WishlistEntryGridList
+          list={list}
+          addItem={<AddItem list={this.state.currentList}
+          getdata={this.getUserData.bind(this)} />}
+        />
       );
-      // )
-                    //         list.map((row, index) => (
-                    //   <TableRow hoverable={true} key={index}>
-                    //     <TableRowColumn style={{fontSize: 18, width: '25%'}}>{row.title}</TableRowColumn>
-                    //     <TableRowColumn  style={{fontSize: 18}}>${row.price}</TableRowColumn>
-                    //     <TableRowColumn style={{color: 'white'}} >
-                    //     {!row.purchased &&
-                    //       <BuyGiftModal
-                    //         primary={this.props.muiTheme.palette.primary1Color}
-                    //         item={row}
-                    //         index={index}
-                    //         getUserData={this.getUserData.bind(this)}
-                    //         isListOwner={isListOwner}
-                    //         userData={this.state.userData}
-                    //       />
-                    //     }
-                    //     </TableRowColumn>
-                    //     <TableRowColumn hoverable={true} style={{ height: 140}}>
-                    //       {
-                    //         row.image_url && <Paper style={{marginTop: 10, maxHeight: 120, textAlign:'center'}} zDepth={1} >
-                    //           <img alt={''} style={style.images} src={row.image_url}/>
-                    //         </Paper>
-                    //       }
-                    //     </TableRowColumn>
-                    //   </TableRow>
-                    // ))
-
-    // } else {
-    //   return <div><img style={{height: 150, width: 150, padding: 20, paddingBottom: 0, filter: 'grayscale(100%)'}} src={giftImage} alt='none'/>
-    //           <h4 style={{padding: 0, color: 'grey'}}>No Items Here</h4>
-    //         </div>
-    // }
   }
 
   renderMessages() {
@@ -275,13 +212,22 @@ class WishListPage extends Component {
   }
 
   handleDelete() {
-    axios.delete('/api/lists/'+this.state.currentList._id)
-    .then((res) => {
-      console.log(res.data);
-      this.setState({
-        deleteOpen: false
-      })
-      this.props.history.push('/'+this.props.match.params.username)
+    var username = this.props.match.params.username;
+    axios("/api/users/"+username)
+    .then((res)=>{
+      return res.data;
+    })
+    .then((user)=>{
+      console.log('THIS IS THE USER wishlists', user.wishlists);
+      if ( user.wishlists.length > 1 ) {
+        axios.delete('/api/lists/'+this.state.currentList._id)
+        .then((res) => {
+          this.setState({
+            deleteOpen: false
+          })
+          this.props.history.push('/'+this.props.match.params.username)
+        })
+      }
     })
   }
 
@@ -348,8 +294,6 @@ class WishListPage extends Component {
               }}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
-                  console.log(this.state.currentList.title);
-                  console.log(this.state.currentList);
                   // Send new data to be changed to the database by interacting with the server.
                   axios.put('/api/lists/'+this.state.currentList._id, {
                     secret: !this.state.currentList.secret,
