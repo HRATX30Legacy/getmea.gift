@@ -37,7 +37,7 @@ export default class FriendsList extends React.Component {
           } else if (userDataFriends[user].friendStatus === 'friend') {
             friends.push(foundUser.data);
           }
-          // console.table(pending);
+          console.table(friends);
           this.setState({ pending: pending, friends: friends });
         })
         .catch(err => {
@@ -88,9 +88,11 @@ export default class FriendsList extends React.Component {
               return (
                 <MenuItem
                   key={pendingFriend._id + 'top'}
-                  primaryText={pendingFriend.firstName.slice(0,1).toUpperCase() + pendingFriend.firstName.slice(1) + ' ' + pendingFriend.lastName.slice(0,1).toUpperCase() + pendingFriend.lastName.slice(1)}
+                  style={{fontSize:20, paddingBottom: 15, lineHeight:'41px'}}
+                  primaryText={pendingFriend.firstName ? pendingFriend.firstName.slice(0,1).toUpperCase() + pendingFriend.firstName.slice(1) + ' ' + pendingFriend.lastName.slice(0,1).toUpperCase() + pendingFriend.lastName.slice(1) : pendingFriend.firstName + ' ' + pendingFriend.lastName}
                   leftIcon={
                     <Avatar
+                      style={{height:35, width:35}}
                       src={pendingFriend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}
                     />}
                   menuItems={[
@@ -114,10 +116,10 @@ export default class FriendsList extends React.Component {
             {this.state.friends.map((friend, index) => {
               return (
                 <MenuItem
-                  style={{fontSize:20, paddingBottom: 30, lineHeight:'41px'}}
+                  style={{fontSize:20, paddingBottom: 15, lineHeight:'41px'}}
                   key={'friend-' + index}
                   value={friend._id}
-                  primaryText={friend.firstName.slice(0,1).toUpperCase() + friend.firstName.slice(1) + ' ' + friend.lastName.slice(0,1).toUpperCase() + friend.lastName.slice(1)}
+                  primaryText={friend.firstName ? friend.firstName.slice(0,1).toUpperCase() + friend.firstName.slice(1) + ' ' + friend.lastName.slice(0,1).toUpperCase() + friend.lastName.slice(1) : friend.firstName + ' ' + friend.lastName}
                   leftIcon={<Avatar
                     style={{height:35, width:35}}
                     src={friend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/>}
