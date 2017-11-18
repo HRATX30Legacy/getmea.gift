@@ -427,7 +427,7 @@ const denyRequest = (denyUser_id, requestUser_id) => {
           reject(err)
         }
     })
-
+    console.log('DENY HELPER');
     User.update({_id:requestUser_id},
       {$set: {['friends.'+String(denyUser_id)]:{friendStatus:'denied', initiated: null}}},
       (err, raw) => {

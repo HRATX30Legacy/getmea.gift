@@ -218,7 +218,6 @@ class WishListPage extends Component {
       return res.data;
     })
     .then((user)=>{
-      console.log('THIS IS THE USER wishlists', user.wishlists);
       if ( user.wishlists.length > 1 ) {
         axios.delete('/api/lists/'+this.state.currentList._id)
         .then((res) => {
@@ -458,7 +457,7 @@ class WishListPage extends Component {
           </div>
 
           <div className="friends-container" style={{flex:'2', marginLeft: '10px', marginTop: '50px', marginRight: '10px'}}>
-            <FriendsList userData={this.state.userData} refresh={this.getUserData.bind(this)}/>
+            <FriendsList refresh={this.props.refresh} history={this.props.history} userData={this.state.userData} refresh={this.getUserData.bind(this)}/>
           </div>
 
 
