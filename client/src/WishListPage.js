@@ -514,7 +514,7 @@ class WishListPage extends Component {
           </div>
 
           <div className="friends-container" style={{flex:'2', marginLeft: '10px', marginTop: '50px', marginRight: '10px'}}>
-            <FriendsList userData={this.state.userData}/>
+            <FriendsList userData={this.state.userData} refresh={this.getUserData.bind(this)}/>
           </div>
 
 

@@ -394,7 +394,8 @@ const friendRequest = (initiatingUser_id, requestedUser_id) => { //requestedUser
   })
 }
 
-const addFriend = (acceptUser_id, requestUser_id) => {
+const addFriend = (acceptUser_id, requestUser_id, callback) => {
+  console.log('Accept user id: ', acceptUser_id, ' Request user id: ', requestUser_id);
   return new Promise((resolve, reject) => {
     User.update({_id:acceptUser_id},
       {$set: {['friends.'+String(requestUser_id)]:{friendStatus:'friend', initiated: null}}},

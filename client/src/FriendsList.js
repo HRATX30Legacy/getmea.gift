@@ -1,6 +1,7 @@
 import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';
 import MenuItem from 'material-ui/MenuItem';
+import Menu from 'material-ui/Menu';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import Paper from 'material-ui/Paper';
 import React from 'react';
@@ -9,10 +10,7 @@ import axios from 'axios';
 export default class FriendsList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      friends: [],
-      pending: []
-    };
+    this.state = { friends: [], pending: [] };
     this.retrieveFriends = this.retrieveFriends.bind(this);
     this.acceptFriendRequest = this.acceptFriendRequest.bind(this);
     this.denyFriendRequest = this.denyFriendRequest.bind(this);
@@ -23,26 +21,22 @@ export default class FriendsList extends React.Component {
   }
 
   retrieveFriends() {
+    console.log('User data after: ', this.props.userData);
     let pending = [];
     let friends = [];
     let userDataFriends = this.props.userData.friends;
+    console.log('My user data: ', this.props.userData);
     for (let user in userDataFriends) {
       axios
-        .post('api/search', {
-          searchMethod: 'id',
-          userInput: user
-        })
+        .post('api/search', { searchMethod: 'id', userInput: user })
         .then(foundUser => {
-          if (userDataFriends[user].friendStatus === 'pending') {
+          if (userDataFriends[user].friendStatus === 'pending' && userDataFriends[user].initiated === false) {
             pending.push(foundUser.data);
           } else if (userDataFriends[user].friendStatus === 'friend') {
             friends.push(foundUser.data);
           }
           console.table(pending);
-          this.setState({
-            pending: pending,
-            friends: friends
-          });
+          this.setState({ pending: pending, friends: friends });
         })
         .catch(err => {
           console.log('Handle search error: ', err);
@@ -50,19 +44,35 @@ export default class FriendsList extends React.Component {
     }
   }
 
-  acceptFriendRequest(e) {
+  acceptFriendRequest(requestUser_id) {
     console.log('Accepted friend request');
-    axios.post('/acceptFriendRequest', {
-      acceptUser_id: this.props.userData._id,
-      requestUser_id: e.target.value
-    }).then((message) => {
-      console.log('Message: ', message);
-      this.forceUpdate();
-    });
+    console.log('Target value: ', requestUser_id);
+    axios
+      .post('api/acceptFriendRequest', {
+        acceptUser_id: this.props.userData._id,
+        requestUser_id: requestUser_id
+      })
+      .then(message => {
+        console.log('Message: ', message);
+        console.log('User data before: ', this.props.userData);
+        this.props.refresh();
+        setTimeout(this.retrieveFriends, 500);
+      });
   }
 
-  denyFriendRequest(e) {
+  denyFriendRequest(requestUser_id) {
     console.log('Denied friend request');
+    axios
+      .post('api/denyFriendRequest', {
+        denyUser_id: this.props.userData._id,
+        requestUser_id: requestUser_id
+      })
+      .then(message => {
+        console.log('Message: ', message);
+        console.log('User data before: ', this.props.userData);
+        this.props.refresh();
+        setTimeout(this.retrieveFriends, 50);
+      });
   }
 
   render() {
@@ -70,35 +80,41 @@ export default class FriendsList extends React.Component {
       <div className="friends-list">
         <Paper>
           <AppBar title="Pending" iconElementLeft={<div />} />
-          {this.state.pending.map((pendingFriend, index) => {
-            console.log(pendingFriend.firstName);
-            return (
-              <div>
-                  <DropDownMenu
-                  value={pendingFriend.firstName}
-                  autoWidth={true}
-                  style={{'width':'200px'}}
-                >
-                  <MenuItem
-                    value={'add-friend'}
-                    primaryText={'Add'}
-                    onClick={this.acceptFriendRequest}
-                  />
-                </DropDownMenu>
-              </div>
-            );
-          })}
+          <Menu desktop={true}>
+            {this.state.pending.map((pendingFriend, index) => {
+              return (
+                <MenuItem
+                  key={pendingFriend._id + 'top'}
+                  primaryText={pendingFriend.firstName + ' ' + pendingFriend.lastName}
+                  menuItems={[
+                    <MenuItem
+                      value={pendingFriend._id}
+                      primaryText="Add"
+                      onClick={this.acceptFriendRequest.bind(this, pendingFriend._id)}
+                    />,
+                    <MenuItem
+                      value={pendingFriend._id}
+                      primaryText="Reject"
+                      onClick={this.denyFriendRequest.bind(this, pendingFriend._id)}
+                    />
+                  ]}
+                />
+              );
+            })}
+          </Menu>
           <AppBar title="All Friends" iconElementLeft={<div />} />
-          {this.state.friends.map((friend, index) => {
-            return (
-              <MenuItem
-                key={'friend-' + index}
-                value={friend._id}
-                primaryText={friend.firstName + ' ' + friend.lastName}
-                rightIcon={<span><b>XXXX</b></span>}
-              />
-            );
-          })}
+          <Menu desktop={true}>
+            {this.state.friends.map((friend, index) => {
+              return (
+                <MenuItem
+                  key={'friend-' + index}
+                  value={friend._id}
+                  primaryText={friend.firstName + ' ' + friend.lastName}
+                  rightIcon={<span>X</span>}
+                />
+              );
+            })}
+          </Menu>
         </Paper>
       </div>
     );

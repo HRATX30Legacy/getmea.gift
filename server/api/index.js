@@ -320,9 +320,11 @@ router.post('/friendRequest', (req, res) => {
 router.post('/acceptFriendRequest', (req, res) => {
   var acceptUser_id = req.body.acceptUser_id;
   var requestUser_id = req.body.requestUser_id;
+
+  console.log('Inside /acceptFriendRequest A: ', acceptUser_id, ' R: ', requestUser_id);
   helpers.addFriend(acceptUser_id, requestUser_id)
   .then((data) => {
-    res.send(`Success: ${data}`)
+    res.send(`Success, friend added: ${data}`)
   })
   .catch((err) => {
     res.status(400).send({err});
