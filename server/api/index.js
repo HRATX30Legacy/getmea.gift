@@ -91,8 +91,6 @@ router.post('/login', (req, res) => {
       res.status(401).send({err: err});
     } else {
       req.session.user_id = user._id;
-      helpers.friendRequest(user._id, '5a0e53ec0c40584f51eb2b2e')
-      helpers.denyRequest(user._id, '5a0e53ec0c40584f51eb2b2e')
       res.send(user);
       helpers.getUserById(user._id)
     }
@@ -167,6 +165,17 @@ router.post('/search', (req, res) => {
   }
 })
 
+router.get('/getFriends', (req, res) => {
+  console.log('GETTING FRIENDS');
+  helpers.getUserById(req.session.user_id)
+  .then((foundUsers) => {
+    //foundUsers is an array of users that met the search requirements
+    res.status(201).send(foundUsers)
+  })
+  .catch((err) => {
+    res.status(500).send(err)
+  })
+})
 
 //add new list to user
 /* Example POST data
@@ -322,26 +331,37 @@ router.post('/acceptFriendRequest', (req, res) => {
   var requestUser_id = req.body.requestUser_id;
 
   console.log('Inside /acceptFriendRequest A: ', acceptUser_id, ' R: ', requestUser_id);
-  helpers.addFriend(acceptUser_id, requestUser_id)
-  .then((data) => {
-    res.send(`Success, friend added: ${data}`)
-  })
-  .catch((err) => {
-    res.status(400).send({err});
-  });
+  if( acceptUser_id === req.session.user_id) {
+    helpers.addFriend(acceptUser_id, requestUser_id)
+    .then((data) => {
+      res.send(`Success, friend added: ${data}`)
+    })
+    .catch((err) => {
+      res.status(400).send({err});
+    });
+  } else {
+    res.status(401).send({err})
+
+  }
 });
 
 router.post('/denyFriendRequest', (req, res) => {
+  console.log('INSIDE FR: ', req.body.requestUser_id );
   var denyUser_id = req.body.denyUser_id;
   var requestUser_id = req.body.requestUser_id;
-  console.log('Server: Denying user id: ', denyUser_id, ' Requested user id: ', requestUser_id);
-  helpers.denyRequest(denyUser_id, requestUser_id)
-  .then((data) => {
-    res.send(`Success: ${data}`)
-  })
-  .catch((err) => {
-    res.status(400).send({err});
-  });
+  if( denyUser_id === req.session.user_id) {
+    console.log('AUTHORIZED');
+    helpers.denyRequest(denyUser_id, requestUser_id)
+    .then((data) => {
+      res.send(`Success: ${data}`)
+    })
+    .catch((err) => {
+      res.status(400).send({err});
+    });
+  } else {
+    res.status(401).send()
+  }
+
 });
 
 

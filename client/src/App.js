@@ -120,8 +120,8 @@ class App extends Component {
                 ></AppBar>
                 <AppDrawer handleLogout={this.handleLogout.bind(this)} currentUser={this.state.currentUser} setCurrentList={this.setCurrentList.bind(this)} toggleDrawer={this.toggleDrawer.bind(this)} open={this.state.drawerShow} handleOptionsClick={this.handleOptionsClick.bind(this)} />
                 <Route exact path="/" component={(props) => <Homepage history={history} setCurrentUser={this.setCurrentUser.bind(this)} />}/>
-                <Route exact path="/:username" component={(props) => <WishListPage {...props} currentUser={this.state.currentUser} />} />
-                <Route exact path="/:username/:list_id" component={(props) => <WishListPage {...props} currentUser={this.state.currentUser} />} />
+                <Route exact path="/:username" component={(props) => <WishListPage {...props} refresh={this.refresh.bind(this)} currentUser={this.state.currentUser} />} />
+                <Route exact path="/:username/:list_id" component={(props) => <WishListPage {...props} refresh={this.refresh.bind(this)} currentUser={this.state.currentUser} />} />
                 <Options appState={this.state} close={this.handleOptionsClick.bind(this)}/>
                 <Footer />
               </div>
