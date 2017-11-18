@@ -394,7 +394,7 @@ const friendRequest = (initiatingUser_id, requestedUser_id) => { //requestedUser
   })
 }
 
-const addFriend = (acceptUser_id, requestUser_id, callback) => {
+const addFriend = (acceptUser_id, requestUser_id) => {
   console.log('Accept user id: ', acceptUser_id, ' Request user id: ', requestUser_id);
   return new Promise((resolve, reject) => {
     User.update({_id:acceptUser_id},
@@ -418,6 +418,7 @@ const addFriend = (acceptUser_id, requestUser_id, callback) => {
 }
 
 const denyRequest = (denyUser_id, requestUser_id) => {
+  console.log('Helpers: Denying user id: ', denyUser_id, ' Requested user id: ', requestUser_id);
   return new Promise((resolve, reject) => {
     User.update({_id:denyUser_id},
       {$set: {['friends.'+String(requestUser_id)]:{friendStatus:'denied', initiated: null}}},

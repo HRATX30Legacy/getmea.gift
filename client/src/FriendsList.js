@@ -28,7 +28,7 @@ export default class FriendsList extends React.Component {
     console.log('My user data: ', this.props.userData);
     for (let user in userDataFriends) {
       axios
-        .post('api/search', { searchMethod: 'id', userInput: user })
+        .post('/api/search', { searchMethod: 'id', userInput: user })
         .then(foundUser => {
           if (userDataFriends[user].friendStatus === 'pending' && userDataFriends[user].initiated === false) {
             pending.push(foundUser.data);
@@ -48,7 +48,7 @@ export default class FriendsList extends React.Component {
     console.log('Accepted friend request');
     console.log('Target value: ', requestUser_id);
     axios
-      .post('api/acceptFriendRequest', {
+      .post('/api/acceptFriendRequest', {
         acceptUser_id: this.props.userData._id,
         requestUser_id: requestUser_id
       })
@@ -56,14 +56,15 @@ export default class FriendsList extends React.Component {
         console.log('Message: ', message);
         console.log('User data before: ', this.props.userData);
         this.props.refresh();
-        setTimeout(this.retrieveFriends, 500);
+        setTimeout(this.retrieveFriends, 50);
       });
   }
 
   denyFriendRequest(requestUser_id) {
     console.log('Denied friend request');
+    console.log('Client: Denying user id: ', this.props.userData._id, ' Requested user id: ', requestUser_id);
     axios
-      .post('api/denyFriendRequest', {
+      .post('/api/denyFriendRequest', {
         denyUser_id: this.props.userData._id,
         requestUser_id: requestUser_id
       })
@@ -71,7 +72,7 @@ export default class FriendsList extends React.Component {
         console.log('Message: ', message);
         console.log('User data before: ', this.props.userData);
         this.props.refresh();
-        setTimeout(this.retrieveFriends, 50);
+        setTimeout(this.retrieveFriends, 500);
       });
   }
 

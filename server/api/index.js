@@ -334,7 +334,8 @@ router.post('/acceptFriendRequest', (req, res) => {
 router.post('/denyFriendRequest', (req, res) => {
   var denyUser_id = req.body.denyUser_id;
   var requestUser_id = req.body.requestUser_id;
-  helpers.addFriend(denyUser_id, requestUser_id)
+  console.log('Server: Denying user id: ', denyUser_id, ' Requested user id: ', requestUser_id);
+  helpers.denyRequest(denyUser_id, requestUser_id)
   .then((data) => {
     res.send(`Success: ${data}`)
   })
