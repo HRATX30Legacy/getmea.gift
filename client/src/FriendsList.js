@@ -21,11 +21,11 @@ export default class FriendsList extends React.Component {
   }
 
   retrieveFriends() {
-    console.log('User data after: ', this.props.userData);
+    // console.log('User data after: ', this.props.userData);
     let pending = [];
     let friends = [];
     let userDataFriends = this.props.userData.friends;
-    console.log('My user data: ', this.props.userData);
+    // console.log('My user data: ', this.props.userData);
     for (let user in userDataFriends) {
       axios
         .post('/api/search', { searchMethod: 'id', userInput: user })
@@ -35,7 +35,7 @@ export default class FriendsList extends React.Component {
           } else if (userDataFriends[user].friendStatus === 'friend') {
             friends.push(foundUser.data);
           }
-          console.table(pending);
+          // console.table(pending);
           this.setState({ pending: pending, friends: friends });
         })
         .catch(err => {
@@ -87,6 +87,7 @@ export default class FriendsList extends React.Component {
                 <MenuItem
                   key={pendingFriend._id + 'top'}
                   primaryText={pendingFriend.firstName + ' ' + pendingFriend.lastName}
+                  leftIcon={<div><img style={{maxWidth: 20, maxHeight: 20}} src={pendingFriend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/></div>}
                   menuItems={[
                     <MenuItem
                       value={pendingFriend._id}
@@ -111,6 +112,7 @@ export default class FriendsList extends React.Component {
                   key={'friend-' + index}
                   value={friend._id}
                   primaryText={friend.firstName + ' ' + friend.lastName}
+                  leftIcon={<div><img style={{maxWidth: 50, maxHeight: 20}} src={friend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/></div>}
                   rightIcon={<span>X</span>}
                 />
               );
