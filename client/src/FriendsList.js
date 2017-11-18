@@ -6,6 +6,8 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import Paper from 'material-ui/Paper';
 import React from 'react';
 import axios from 'axios';
+import Avatar from 'material-ui/Avatar';
+
 
 export default class FriendsList extends React.Component {
   constructor(props) {
@@ -78,7 +80,7 @@ export default class FriendsList extends React.Component {
 
   render() {
     return (
-      <div className="friends-list">
+      <div className="friends-list" style={{lineHeight:40}}>
         <Paper>
           <AppBar title="Pending" iconElementLeft={<div />} />
           <Menu desktop={true}>
@@ -87,7 +89,10 @@ export default class FriendsList extends React.Component {
                 <MenuItem
                   key={pendingFriend._id + 'top'}
                   primaryText={pendingFriend.firstName.slice(0,1).toUpperCase() + pendingFriend.firstName.slice(1) + ' ' + pendingFriend.lastName.slice(0,1).toUpperCase() + pendingFriend.lastName.slice(1)}
-                  leftIcon={<div><img style={{maxWidth: 20, maxHeight: 20}} src={pendingFriend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/></div>}
+                  leftIcon={
+                    <Avatar
+                      src={pendingFriend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}
+                    />}
                   menuItems={[
                     <MenuItem
                       value={pendingFriend._id}
@@ -109,10 +114,13 @@ export default class FriendsList extends React.Component {
             {this.state.friends.map((friend, index) => {
               return (
                 <MenuItem
+                  style={{fontSize:20, paddingBottom: 30, lineHeight:'41px'}}
                   key={'friend-' + index}
                   value={friend._id}
                   primaryText={friend.firstName.slice(0,1).toUpperCase() + friend.firstName.slice(1) + ' ' + friend.lastName.slice(0,1).toUpperCase() + friend.lastName.slice(1)}
-                  leftIcon={<div><img style={{maxWidth: 50, maxHeight: 20}} src={friend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/></div>}
+                  leftIcon={<Avatar
+                    style={{height:35, width:35}}
+                    src={friend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/>}
                   rightIcon={<span>X</span>}
                 />
               );
