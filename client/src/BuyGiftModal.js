@@ -5,6 +5,9 @@ import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import Error from 'material-ui/svg-icons/alert/error';
 import axios from 'axios';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import IconButton from 'material-ui/IconButton';
+
 
 class BuyGiftModal extends React.Component {
   constructor(props) {
@@ -120,9 +123,11 @@ class BuyGiftModal extends React.Component {
       )
     } else {
          if (!this.props.isListOwner) {
-           return <RaisedButton secondary label="Get Gift" onClick={this.handleOpen.bind(this)} />
+          return <IconButton><StarBorder color="white" onClick={() => {this.handleOpen}}/></IconButton>
+          //  return <RaisedButton secondary label="Get Gift" onClick={this.handleOpen.bind(this)} />
          } else {
-           return <RaisedButton secondary label="Delete" onClick={()=>{this.deleteItem(this.props.index)}} />
+           return <IconButton><StarBorder color="white" onClick={() => {this.deleteItem(this.props.index)}}/></IconButton>
+          //  return <RaisedButton secondary label="Delete" onClick={()=>{this.deleteItem(this.props.index)}} />
          }
 
     }
