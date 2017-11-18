@@ -54,6 +54,7 @@ export default class WishlistEntryGridList extends React.Component {
               <img src={tile.image_url} />
             </GridTile>
           ))}
+          {this.props.addItem}
         </GridList>
       </div>
     );
