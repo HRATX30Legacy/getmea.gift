@@ -1,6 +1,7 @@
 import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';
 import MenuItem from 'material-ui/MenuItem';
+import DropDownMenu from 'material-ui/DropDownMenu';
 import Paper from 'material-ui/Paper';
 import React from 'react';
 import axios from 'axios';
@@ -70,13 +71,21 @@ export default class FriendsList extends React.Component {
         <Paper>
           <AppBar title="Pending" iconElementLeft={<div />} />
           {this.state.pending.map((pendingFriend, index) => {
+            console.log(pendingFriend.firstName);
             return (
-              <MenuItem
-                key={'pending-' + index}
-                value={pendingFriend._id}
-                primaryText={pendingFriend.firstName + ' ' + pendingFriend.lastName}
-                onClick={this.acceptFriendRequest}
-              />
+              <div>
+                  <DropDownMenu
+                  value={pendingFriend.firstName}
+                  autoWidth={true}
+                  style={{'width':'200px'}}
+                >
+                  <MenuItem
+                    value={'add-friend'}
+                    primaryText={'Add'}
+                    onClick={this.acceptFriendRequest}
+                  />
+                </DropDownMenu>
+              </div>
             );
           })}
           <AppBar title="All Friends" iconElementLeft={<div />} />
@@ -86,6 +95,7 @@ export default class FriendsList extends React.Component {
                 key={'friend-' + index}
                 value={friend._id}
                 primaryText={friend.firstName + ' ' + friend.lastName}
+                rightIcon={<span><b>XXXX</b></span>}
               />
             );
           })}
