@@ -86,7 +86,7 @@ export default class FriendsList extends React.Component {
               return (
                 <MenuItem
                   key={pendingFriend._id + 'top'}
-                  primaryText={pendingFriend.firstName + ' ' + pendingFriend.lastName}
+                  primaryText={pendingFriend.firstName.slice(0,1).toUpperCase() + pendingFriend.firstName.slice(1) + ' ' + pendingFriend.lastName.slice(0,1).toUpperCase() + pendingFriend.lastName.slice(1)}
                   leftIcon={<div><img style={{maxWidth: 20, maxHeight: 20}} src={pendingFriend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/></div>}
                   menuItems={[
                     <MenuItem
@@ -111,7 +111,7 @@ export default class FriendsList extends React.Component {
                 <MenuItem
                   key={'friend-' + index}
                   value={friend._id}
-                  primaryText={friend.firstName + ' ' + friend.lastName}
+                  primaryText={friend.firstName.slice(0,1).toUpperCase() + friend.firstName.slice(1) + ' ' + friend.lastName.slice(0,1).toUpperCase() + friend.lastName.slice(1)}
                   leftIcon={<div><img style={{maxWidth: 50, maxHeight: 20}} src={friend.profilePicURL || "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"}/></div>}
                   rightIcon={<span>X</span>}
                 />
