@@ -39,6 +39,7 @@ import axios from 'axios';
 import giftImage from './img/gift.png';
 
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { lchmod } from 'fs';
 
 const style = {
 
@@ -74,7 +75,8 @@ class WishListPage extends Component {
       addListOpen: false,
       showPurchased: false
     }
-    this.renderMessages = this.renderMessages.bind(this)
+    this.renderMessages = this.renderMessages.bind(this);
+    this.appendPurchase = this.appendPurchase.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +100,11 @@ class WishListPage extends Component {
 
   showWanted() {
     this.setState({ showPurchased: false });
+  }
+
+  appendPurchase(item) {
+    this.setState({purchasedItems: [...this.state.purchasedItems].push(item)})
+     console.log(this.state.purchasedItems);
   }
 
   // API call to fetch user data
@@ -162,10 +169,9 @@ class WishListPage extends Component {
       this.state.wantedItems = this.state.currentList.items.filter( (item) => {
         return item.purchased === false;
       });
-
-      this.state.purchasedItems = this.state.currentList.items.filter( (item) => {
-        return item.purchased === true;
-      });
+      // this.state.purchasedItems = this.state.currentList.items.filter( (item) => {
+      //   return item.purchased === true;
+      // });
     }
     var isListOwner = false;
     if (this.state.currentList){
@@ -176,9 +182,11 @@ class WishListPage extends Component {
 
       return (
         <WishlistEntryGridList
+          userData={this.getUserData.bind(this)}
+          isListOwner={isListOwner}
           list={list}
-          addItem={<AddItem list={this.state.currentList}
-          getdata={this.getUserData.bind(this)} />}
+          addItem={<AddItem list={this.state.currentList} getdata={this.getUserData.bind(this)} />}
+          purchase={this.appendPurchase.bind(this)}
         />
       );
   }
