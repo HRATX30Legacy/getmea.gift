@@ -31,7 +31,7 @@ export default class Login extends Component {
       fileReceived: false,
       fileName: '',
       files: null,
-      profilePicURL: "https://support.plymouth.edu/kb_images/Yammer/default.jpeg"
+      profilePicURL: "http://static1.squarespace.com/static/522a22cbe4b04681b0bff826/t/581cc65fe4fcb5a68ecd940c/1478280803080/hrhq-avatar.png?format=1000w"
     };
 
     this.setStore = (obj) => {
@@ -299,7 +299,7 @@ export default class Login extends Component {
                 errorText={this.state.password === this.state.verifyPassword ? '' : "Passwords do not match"}
               /><br />
               <Dropzone disableClick={false} multiple={false} accept={'image/*'} onDrop={this.onDrop} style={{maxHeight: 50, maxWidth: 150}}>
-                <FlatButton secondary label="Add Profile Picture"></FlatButton>
+                <FlatButton secondary label="Add Picture"></FlatButton>
               </Dropzone>
               {this.state.fileReceived ? <span style={{color: 'blue', width: 150}}>{this.state.fileName}</span> : null}
             </form>
