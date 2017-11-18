@@ -64,6 +64,7 @@ router.post('/signup', (req, res) => {
         user.email = req.body.email.toLowerCase()
         user.firstName = req.body.firstName.toLowerCase()
         user.lastName = req.body.lastName.toLowerCase()
+        user.profilePicURL = req.body.profilePicURL
         return user.save()
       })
       .then((user) => {

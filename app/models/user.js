@@ -9,6 +9,7 @@ var userSchema = mongoose.Schema({
   firstName: {type: String, required: false},
   lastName: {type: String, required: false},
   friends: {type: Object, required: false},
+  profilePicURL: {type: String, required: false},
 })
 
 // user method for generating a hashed password

@@ -213,7 +213,7 @@ export default class Options extends Component {
             </div>
             <div className="rightOptions" style={{flex: 2}}>
               <Paper style={{marginTop: 10, maxHeight: 180, textAlign:'center', maxWidth: 140}} zDepth={1} >
-                <img alt={''} style={{border: "1px solid", maxHeight: 180, maxWidth: '100%', minWidth:"100%"}} src="http://res.cloudinary.com/getmeagiftlegacy/image/upload/v1510851221/most_normal_picture_m7n8rs.jpg"/>
+                <img alt={''} style={{border: "1px solid", maxHeight: 180, maxWidth: '100%', minWidth:"100%", minHeight: '100%'}} src={this.props.appState.currentUser.profilePicURL || "https://support.plymouth.edu/kb_images/Yammer/default.jpeg"}/>
               </Paper>
               <Dropzone disableClick={false} multiple={false} accept={'image/*'} onDrop={this.onDrop} style={{maxHeight: 50, maxWidth: 150}}>
                 <FlatButton secondary label="Add New Photo"></FlatButton>
